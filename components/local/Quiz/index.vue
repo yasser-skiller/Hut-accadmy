@@ -14,7 +14,9 @@
             <div v-for="option in Quiz_data.questions[Quiz_serial].options" :key="option.uid">
               <label
                :class="selected === `{'${Quiz_data.questions[Quiz_serial].id}' : {'answered' : '${option.value}'}}` ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
-               :for="option.uid">{{option.title}}
+               :for="option.uid"
+              >
+               {{option.title}}
               </label>
               <b-form-radio
                 v-model="selected"
@@ -32,7 +34,7 @@
             <div class="w-100 d-flex justify-content-center">
               <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial === Quiz_data.questions.length-1 " v-on:click="SendData">إنهاء الاختبار</b-button>
               <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial !== Quiz_data.questions.length-1 " v-on:click="Next">التالي</b-button>
-              <b-button type="button" size="lg" variant="outline-danger" class="p mr-5 rounded f-14" v-if="Quiz_serial > 0 " v-on:click="Quiz_serial--">السابق</b-button>
+              <b-button type="button" size="lg" variant="outline-danger" class="p mr-5 rounded f-14" v-if="Quiz_serial > 0 " v-on:click="Previous">السابق</b-button>
             </div>
 
           </b-col>
@@ -66,7 +68,8 @@ import Loading from "@/components/local/Loading";
     data() {
       return {
         Quiz_data: [],
-        Answered:{},
+        Answered:[],
+        AnsweredObj:{},
         selected: '',
         status_code: 0,
         Quiz_serial:0,
@@ -74,6 +77,7 @@ import Loading from "@/components/local/Loading";
         Minute:0,
         Seconds:0,
         Remseconds:0,
+        copy: '',
 
       }
     },
@@ -101,7 +105,7 @@ import Loading from "@/components/local/Loading";
         axios.post(
           `${config.apiUrl}wp-json/learnpress/v1/quiz/finish`,
           { headers: {"Authorization" : `Bearer ${config.token}`} },
-          { auth: {"username" : `${config.username}`, "password": `${config.password}`, "id" : 95, "answered": {"96" : {"answered" : "99fca2db"},}} }
+          { auth: {"username" : `${config.username}`, "password": `${config.password}`, "id" : 95, "answered": {...this.Answered} } }
         )
         .then((res) => {
           console.log(res);
@@ -112,10 +116,43 @@ import Loading from "@/components/local/Loading";
       },
       Next(){
         this.Quiz_serial++ ;
-        this.Answered.push(this.selected);
-        this.selected = '';
-        console.log(this.Answered);
-        console.log(this.selected);
+
+        if(this.selected !== ''){
+          if(this.Answered.length > 0){
+            this.Answered.forEach(element => {
+              if(element.includes(`${this.Quiz_data.questions[this.Quiz_serial-1].id}'`)){
+                this.Answered =  this.Answered.filter(e => e !== element);
+                this.Answered.push(this.selected);
+              }else{
+                this.Answered.push(this.selected);
+              }
+            });
+          }else{
+            this.Answered.push(this.selected);
+          }
+          console.log(this.Answered);
+          // this.AnsweredObj = {...this.Answered}
+          // console.log(this.AnsweredObj);
+        }
+
+
+        const matches  = this.Answered.filter(element => {
+          if (element.indexOf(`{'${this.Quiz_data.questions[this.Quiz_serial].id}' : {'answered' :`) !== -1) {
+            return true;
+          }
+        });
+
+        this.selected = matches[0]
+
+      },
+      Previous(){
+        this.Quiz_serial-- ;
+        const matches  = this.Answered.filter(element => {
+          if (element.indexOf(`{'${this.Quiz_data.questions[this.Quiz_serial].id}' : {'answered' : '`) !== -1) {
+            return true;
+          }
+        });
+
       }
 
 
