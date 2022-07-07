@@ -78,9 +78,9 @@ import axios from "axios";
 import config from "@/config";
 import Loading from "@/components/local/Loading";
   export default {
-      components:{
-        Loading,
-      },
+    components:{
+      Loading,
+    },
     data() {
       return {
         Quiz_data: [],
@@ -215,6 +215,9 @@ import Loading from "@/components/local/Loading";
                 this.Quiz_duration = this.Minute + ':' + this.Remseconds
               }
             }, 1000);
+          }else{
+            this.SendData();
+            this.status_code = 202;
           }
         },
         immediate: true
