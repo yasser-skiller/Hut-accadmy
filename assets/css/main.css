@@ -106,7 +106,7 @@ a{
   border-radius: 10px !important;
 }
 .p{
-  padding: 12px 75px;
+  padding: 9px 50px;
 }
 
 /* css Class */
@@ -140,6 +140,7 @@ a{
 .DarkWhiteColor{
   color: var(--DarkWhiteSceColor);
 }
+
 .bg-GreenColor{
   background-color: #48AB70 !important;
 }
@@ -161,6 +162,7 @@ a{
   background-color: var(--AnswerColor);
   color: #fff;
 }
+
 .border_0{
   border: 1px solid var(--GraythrColor);
 }
