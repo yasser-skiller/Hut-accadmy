@@ -36,9 +36,9 @@
           <div :class="Quiz_data[Quiz_serial].paragraph || Quiz_data[Quiz_serial].thumbnail ? 'Responsive' : 'Responsive4' ">
              <div v-for="option in Quiz_data[Quiz_serial].options" :key="option.uid">
                 <label
-                :class="selected === `{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}` ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
+                :class="selected === `'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}` ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
                 :for="option.uid"
-                v-on:click="Save(Quiz_data[Quiz_serial].id, `{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}`)"
+                v-on:click="Save(Quiz_data[Quiz_serial].id, `'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}`,option.value)"
                 >
                 {{option.title}}
                 </label>
@@ -48,7 +48,7 @@
                   :id="`${option.uid}`"
                   class="d-none"
                   name="some-radios"
-                  :value="`{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}`"
+                  :value="`'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}`"
                 >
                 </b-form-radio>
               </div>
@@ -56,7 +56,7 @@
 
           </b-form-group>
 
-          <div class="mt-3 d-none">Selected: <strong>{{ selected }}</strong></div>
+          <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
           <div class="w-100 d-flex justify-content-center">
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial === Quiz_data.length-1 " v-on:click="Finish_Quiz">إنهاء الاختبار</b-button>
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial !== Quiz_data.length-1 " v-on:click="Next">التالي</b-button>
@@ -103,7 +103,6 @@ import Loading from "@/components/local/Loading";
       return {
         Quiz_data: [],
         Answered:[],
-        AnsweredObj:{},
         selected: '',
         status_code: '',
         Quiz_serial:0,
@@ -155,6 +154,8 @@ import Loading from "@/components/local/Loading";
 
         var raw = JSON.stringify({"id":"95", "answered" : {...this.Answered}});
 
+        // var raw = JSON.stringify({"id":"95", "answered" : {96: {answered: "c53113e0"},107: {answered: "622ee487"}}});
+
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
@@ -176,7 +177,7 @@ import Loading from "@/components/local/Loading";
         const matches  = this.Answered.filter(element => {
           console.log("element",element)
           if(element !== undefined){
-            if (element.indexOf(`{'${this.Quiz_data[this.Quiz_serial].id}' : {'answered' : '`) !== -1) {
+            if (element.indexOf(`'${this.Quiz_data[this.Quiz_serial].id}' : {'answered' : '`) !== -1) {
               return true;
             }
           }
@@ -208,10 +209,6 @@ import Loading from "@/components/local/Loading";
           this.Answered.push(value);
         }
 
-        console.log("saving",this.Answered);
-        // this.AnsweredObj = {...this.Answered}
-        // console.log(this.AnsweredObj);
-        // active Question
         document.getElementById(id).classList.add('bg-AnswerColor')
 
       },
