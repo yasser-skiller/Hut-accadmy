@@ -56,7 +56,7 @@
 
           </b-form-group>
 
-          <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
+          <div class="mt-3 d-none">Selected: <strong>{{ selected }}</strong></div>
           <div class="w-100 d-flex justify-content-center">
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial === Quiz_data.length-1 " v-on:click="Finish_Quiz">إنهاء الاختبار</b-button>
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial !== Quiz_data.length-1 " v-on:click="Next">التالي</b-button>
