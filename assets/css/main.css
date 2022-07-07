@@ -151,6 +151,11 @@ a{
 }
 .bg-RevsionColor{
   background-color: var(--RevsionColor);
+  color: #fff;
+}
+.bg-CurrentColor{
+  background-color: var(--BlueColor);
+  color: #fff;
 }
 .bg-AnswerColor{
   background-color: var(--AnswerColor);

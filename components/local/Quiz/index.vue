@@ -9,15 +9,13 @@
         <div class="" v-for="index in Quiz_data.questions.length" :key="index">
         <span
           v-on:click="Pagination(index)"
-          :id="`${Quiz_data.questions[Quiz_serial].id}`"
-          :class="Question_Case === 1 ? 'border py-2 px-3 mx-1 bg-AnswerColor' : 'border py-2 px-3 mx-1'"
+          :id="`${Quiz_data.questions[index-1].id}`"
+          class="py-2 px-3 mx-1 Pagination_label bg-RevsionColor"
           >
           {{index}}
           </span>
         </div>
       </div>
-
-
 
       <p class="DarkBlueSecColor f-14"> {{Quiz_data.name}}</p>
       <p v-html="Quiz_data.questions[Quiz_serial].content"></p>
@@ -92,8 +90,6 @@ import Loading from "@/components/local/Loading";
         Minute:0,
         Seconds:0,
         Remseconds:0,
-        Question_Case: 0,
-
       }
     },
     mounted() {
@@ -111,10 +107,16 @@ import Loading from "@/components/local/Loading";
         this.status_code = res.status
         this.Quiz_data = res.data;
         this.Seconds =  res.data.duration.replace(/minutes/g,'')*60;
-        console.log(this.Quiz_data);
+
+        // active
+        setTimeout(() => {
+          document.getElementById(this.Quiz_data.questions[this.Quiz_serial].id).classList.add('bg-CurrentColor')
+        }, 500);
+
       } catch (error) {
         console.log(error);
       }
+
      },
       SendData() {
         axios.post(
@@ -140,7 +142,14 @@ import Loading from "@/components/local/Loading";
           }
 
         });
-        this.selected = matches[0]
+        this.selected = matches[0];
+
+        // currnet
+        let arr_Pagination_label = document.querySelectorAll('.Pagination_label');
+        arr_Pagination_label.forEach(element => {
+           element.classList.remove('bg-CurrentColor')
+        });
+        document.getElementById(this.Quiz_data.questions[this.Quiz_serial].id).classList.add('bg-CurrentColor')
       },
       Save(id, value){
         console.log("id",id);
@@ -162,6 +171,9 @@ import Loading from "@/components/local/Loading";
         console.log("saving",this.Answered);
         // this.AnsweredObj = {...this.Answered}
         // console.log(this.AnsweredObj);
+        // active Question
+        document.getElementById(id).classList.add('bg-AnswerColor')
+
       },
       Next(){
         this.Quiz_serial++ ;
