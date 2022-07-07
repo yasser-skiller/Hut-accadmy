@@ -5,6 +5,18 @@
         <p class="">السؤال رقم <span class="OrangeColor">{{Quiz_serial+1}}</span> من <span class="GreenColor">{{Quiz_data.questions.length}}</span> سؤال</p>
       </div>
       <p class="text-center DarkBlueSecColor">{{Quiz_duration}}</p>
+      <div class="d-flex w-100 my-5">
+        <div class="" v-for="index in Quiz_data.questions.length" :key="index">
+        <span
+          v-on:click="Pagination(index)"
+          :id="`${Quiz_data.questions[Quiz_serial].id}`"
+          :class="Question_Case === 1 ? 'border py-2 px-3 mx-1 bg-AnswerColor' : 'border py-2 px-3 mx-1'"
+          >
+          {{index}}
+          </span>
+        </div>
+      </div>
+
 
 
       <p class="DarkBlueSecColor f-14"> {{Quiz_data.name}}</p>
@@ -17,6 +29,7 @@
             <label
             :class="selected === `{'${Quiz_data.questions[Quiz_serial].id}' : {'answered' : '${option.value}'}}` ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
             :for="option.uid"
+            v-on:click="Save(Quiz_data.questions[Quiz_serial].id, `{'${Quiz_data.questions[Quiz_serial].id}' : {'answered' : '${option.value}'}}`)"
             >
             {{option.title}}
             </label>
@@ -79,7 +92,7 @@ import Loading from "@/components/local/Loading";
         Minute:0,
         Seconds:0,
         Remseconds:0,
-        copy: '',
+        Question_Case: 0,
 
       }
     },
@@ -116,29 +129,8 @@ import Loading from "@/components/local/Loading";
           console.log(error);
         });
       },
-      Save(){
-        if(this.selected !== ''){
-          if(this.Answered.length > 0){
-            this.Answered.forEach(element => {
-              if(element){
-                if(element.includes(`${this.Quiz_data.questions[this.Quiz_serial-1].id}'`)){
-                  this.Answered =  this.Answered.filter(e => e !== element);
-                }
-                if(element.includes(`${this.Quiz_data.questions[this.Quiz_serial].id}'`)){
-                  this.Answered =  this.Answered.filter(e => e !== element);
-                }
-              }
-            });
-            this.Answered.push(this.selected);
-          }if(this.Answered.length === 0){
-            this.Answered.push(this.selected);
-          }
-          console.log(this.Answered);
-          // this.AnsweredObj = {...this.Answered}
-          // console.log(this.AnsweredObj);
-        }
-      },
       Compare(){
+        console.log("matches",this.Answered);
         const matches  = this.Answered.filter(element => {
           console.log("element",element)
           if(element !== undefined){
@@ -150,16 +142,39 @@ import Loading from "@/components/local/Loading";
         });
         this.selected = matches[0]
       },
+      Save(id, value){
+        console.log("id",id);
+        console.log("this.selected",value);
+        if(this.Answered.length > 0){
+          console.log("sav",this.Answered);
+          this.Answered.forEach(element => {
+            if(element){
+              if(element.includes(`${id}'`)){
+                this.Answered =  this.Answered.filter(e => e !== element);
+              }
+            }
+          });
+          this.Answered.push(value);
+        }if(this.Answered.length === 0){
+          this.Answered.push(value);
+        }
+
+        console.log("saving",this.Answered);
+        // this.AnsweredObj = {...this.Answered}
+        // console.log(this.AnsweredObj);
+      },
       Next(){
         this.Quiz_serial++ ;
-        this.Save();
         this.Compare();
       },
       Previous(){
         this.Quiz_serial-- ;
-        // this.Save();
         this.Compare();
-      }
+      },
+      Pagination(index){
+        this.Quiz_serial = index -1;
+        this.Compare();
+      },
 
 
     },
