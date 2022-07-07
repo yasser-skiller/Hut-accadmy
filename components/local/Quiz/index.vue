@@ -5,7 +5,7 @@
         <p class="">السؤال رقم <span class="OrangeColor">{{Quiz_serial+1}}</span> من <span class="GreenColor">{{Quiz_data.length}}</span> سؤال</p>
       </div>
       <p class="text-center DarkBlueSecColor">{{Quiz_duration}}</p>
-      <div class="d-flex w-100 my-5">
+      <div class="d-flex w-100 mt-5 mb-4">
         <div class="" v-for="index in Quiz_data.length" :key="index">
         <span
           v-on:click="Pagination(index)"
@@ -17,30 +17,43 @@
         </div>
       </div>
 
-      <!-- <p class="DarkBlueSecColor f-14"> {{Quiz_data[Quiz_serial].title}}</p> -->
+      <div class="d-flex align-items-center mb-4 flex-wrap">
+        <span class="f-14">محلول</span>
+        <span class="box bg-AnswerColor mx-2"></span>
+        <span class="f-14">مؤجل</span>
+        <span class="box bg-RevsionColor  mx-2"></span>
+        <span class="f-14">الحالي</span>
+        <span class="box bg-CurrentColor  mx-2"></span>
+
+      </div>
+
+      <p class="DarkBlueSecColor f-14"> {{Quiz_data[Quiz_serial].title}}</p>
       <p v-html="Quiz_data[Quiz_serial].content"></p>
 
       <b-row align-h="center"  class="flex-wrap-reverse  justify-content-center align-items-end">
         <b-col :class="Quiz_data[Quiz_serial].paragraph || Quiz_data[Quiz_serial].thumbnail ? 'col-11 col-lg-6 col-md-8 col-sm-6 px-3 my-4' : 'col-11 px-3 my-4'">
-          <b-form-group  v-slot="{ ariaDescribedby }"  >
-          <div v-for="option in Quiz_data[Quiz_serial].options" :key="option.uid">
-            <label
-            :class="selected === `{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}` ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
-            :for="option.uid"
-            v-on:click="Save(Quiz_data[Quiz_serial].id, `{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}`)"
-            >
-            {{option.title}}
-            </label>
-            <b-form-radio
-              v-model="selected"
-              :aria-describedby="ariaDescribedby"
-              :id="`${option.uid}`"
-              class="d-none"
-              name="some-radios"
-              :value="`{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}`"
-            >
-            </b-form-radio>
+          <b-form-group  v-slot="{ ariaDescribedby }">
+          <div :class="Quiz_data[Quiz_serial].paragraph || Quiz_data[Quiz_serial].thumbnail ? 'Responsive' : 'Responsive4' ">
+             <div v-for="option in Quiz_data[Quiz_serial].options" :key="option.uid">
+                <label
+                :class="selected === `{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}` ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
+                :for="option.uid"
+                v-on:click="Save(Quiz_data[Quiz_serial].id, `{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}`)"
+                >
+                {{option.title}}
+                </label>
+                <b-form-radio
+                  v-model="selected"
+                  :aria-describedby="ariaDescribedby"
+                  :id="`${option.uid}`"
+                  class="d-none"
+                  name="some-radios"
+                  :value="`{'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}}`"
+                >
+                </b-form-radio>
+              </div>
           </div>
+
           </b-form-group>
 
           <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
@@ -101,13 +114,11 @@ import Loading from "@/components/local/Loading";
       }
     },
     mounted() {
-      this.SendData();
-      setTimeout(() => {
-        this.fetchData();
-      }, 2000);
+      this.fetchData();
     },
     methods: {
       fetchData() {
+        this.SendData();
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL3dvcmRwcmVzcyIsImlhdCI6MTY1NzE5NTE5MywibmJmIjoxNjU3MTk1MTkzLCJleHAiOjE2NTc3OTk5OTMsImRhdGEiOnsidXNlciI6eyJpZCI6IjEifX19.1aF7JCRBx4YrgtA622JyNsUvKk1DMXhJPsI8pmuKTRI");
         myHeaders.append("Content-Type", "application/json");
@@ -133,7 +144,6 @@ import Loading from "@/components/local/Loading";
           // active
           setTimeout(() => {
             document.getElementById(this.Quiz_data[this.Quiz_serial].id).classList.add('bg-CurrentColor')
-                      console.log(this.Quiz_data[this.Quiz_serial].id)
           }, 2000);
         })
         .catch (error => console.log(error));
@@ -281,5 +291,20 @@ import Loading from "@/components/local/Loading";
 .ImgManger{
   max-height: 400px;
   width: 100%;
+}
+.box{
+  width: 20px;
+  height: 20px;
+}
+.Responsive4{
+  display: grid;
+  grid-template-columns: auto auto ;
+  align-items: flex-start;
+  justify-content: center;
+  grid-column-gap: 25px;
+}
+.Responsive{
+  display: grid;
+  grid-template-columns: auto  ;
 }
 </style>
