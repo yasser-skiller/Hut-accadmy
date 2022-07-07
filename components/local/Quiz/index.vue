@@ -45,7 +45,7 @@
 
           <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
           <div class="w-100 d-flex justify-content-center">
-            <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial === Quiz_data.questions.length-1 " v-on:click="SendData">إنهاء الاختبار</b-button>
+            <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial === Quiz_data.questions.length-1 " v-on:click="Finish_Quiz">إنهاء الاختبار</b-button>
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial !== Quiz_data.questions.length-1 " v-on:click="Next">التالي</b-button>
             <b-button type="button" size="lg" variant="outline-danger" class="p mr-5 rounded f-14" v-if="Quiz_serial > 0 " v-on:click="Previous">السابق</b-button>
           </div>
@@ -64,6 +64,9 @@
   </div>
 
   <div v-else class="d-flex justify-content-center align-items-center spinner_loading">
+    <Loading/>
+  </div>
+   <div v-if="status_code === 202" class="d-flex justify-content-center align-items-center spinner_loading">
     <Loading/>
   </div>
 
@@ -94,7 +97,7 @@ import Loading from "@/components/local/Loading";
     },
     mounted() {
       this.fetchData();
-      this.SendData();
+      // this.SendData();
     },
     methods: {
      async fetchData() {
@@ -126,6 +129,7 @@ import Loading from "@/components/local/Loading";
         )
         .then((res) => {
           console.log(res);
+          this.status_code = res.status;
         })
         .catch((error) => {
           console.log(error);
@@ -182,6 +186,11 @@ import Loading from "@/components/local/Loading";
       Previous(){
         this.Quiz_serial-- ;
         this.Compare();
+      },
+      Finish_Quiz(){
+        this.SendData();
+        this.status_code = 202;
+
       },
       Pagination(index){
         this.Quiz_serial = index -1;
