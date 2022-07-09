@@ -36,9 +36,9 @@
           <div :class="Quiz_data[Quiz_serial].paragraph || Quiz_data[Quiz_serial].thumbnail ? 'Responsive' : 'Responsive4' ">
              <div v-for="option in Quiz_data[Quiz_serial].options" :key="option.uid">
                 <label
-                :class="selected === `'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}` ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
+                :class="selected === option.value ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
                 :for="option.uid"
-                v-on:click="Save(Quiz_data[Quiz_serial].id, `'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}`,option.value)"
+                v-on:click="Save(Quiz_data[Quiz_serial].id, option.value, Quiz_serial)"
                 >
                 {{option.title}}
                 </label>
@@ -48,7 +48,7 @@
                   :id="`${option.uid}`"
                   class="d-none"
                   name="some-radios"
-                  :value="`'${Quiz_data[Quiz_serial].id}' : {'answered' : '${option.value}'}`"
+                  :value="option.value"
                 >
                 </b-form-radio>
               </div>
@@ -56,7 +56,7 @@
 
           </b-form-group>
 
-          <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
+          <div class="mt-3 d-none">Selected: <strong>{{ selected }}</strong></div>
           <div class="w-100 d-flex justify-content-center">
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial === Quiz_data.length-1 " v-on:click="Finish_Quiz">إنهاء الاختبار</b-button>
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial !== Quiz_data.length-1 " v-on:click="Next">التالي</b-button>
@@ -103,6 +103,7 @@ import Loading from "@/components/local/Loading";
       return {
         Quiz_data: [],
         Answered:[],
+        Answered_obj : {},
         selected: '',
         status_code: '',
         Quiz_serial:0,
@@ -152,9 +153,14 @@ import Loading from "@/components/local/Loading";
         myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL3dvcmRwcmVzcyIsImlhdCI6MTY1NzE5NTE5MywibmJmIjoxNjU3MTk1MTkzLCJleHAiOjE2NTc3OTk5OTMsImRhdGEiOnsidXNlciI6eyJpZCI6IjEifX19.1aF7JCRBx4YrgtA622JyNsUvKk1DMXhJPsI8pmuKTRI");
         myHeaders.append("Content-Type", "application/json");
 
-        var raw = JSON.stringify({"id":"95", "answered" : {...this.Answered}});
+        if(this.Answered.length > 0){
+          for (var i=0; i<this.Answered.length; i++){
+            this.Answered_obj[this.Answered[i].id] = {answered: `${this.Answered[i].answer}`} ;
+          }
+          console.log("Answered_obj",this.Answered_obj)
+        }
 
-        // var raw = JSON.stringify({"id":"95", "answered" : {96: {answered: "c53113e0"},107: {answered: "622ee487"}}});
+        var raw = JSON.stringify({"id":"95", "answered" : this.Answered_obj});
 
         var requestOptions = {
           method: 'POST',
@@ -173,43 +179,37 @@ import Loading from "@/components/local/Loading";
 
       },
       Compare(){
-        console.log("matches",this.Answered);
-        const matches  = this.Answered.filter(element => {
-          console.log("element",element)
-          if(element !== undefined){
-            if (element.indexOf(`'${this.Quiz_data[this.Quiz_serial].id}' : {'answered' : '`) !== -1) {
-              return true;
+        if(this.Answered.length > 0){
+          this.Answered.forEach(element => {
+            if(element.my_Quiz_serial === this.Quiz_serial){
+              this.selected = element.answer
             }
-          }
+          });
+        }
 
-        });
-        this.selected = matches[0];
 
         // currnet
         let arr_Pagination_label = document.querySelectorAll('.Pagination_label');
         arr_Pagination_label.forEach(element => {
-           element.classList.remove('bg-CurrentColor')
+          element.classList.remove('bg-CurrentColor')
         });
         document.getElementById(this.Quiz_data[this.Quiz_serial].id).classList.add('bg-CurrentColor')
       },
-      Save(id, value){
-        console.log("id",id);
-        console.log("this.selected",value);
+      Save(id, option_value, my_Quiz_serial){
         if(this.Answered.length > 0){
-          console.log("sav",this.Answered);
           this.Answered.forEach(element => {
             if(element){
-              if(element.includes(`${id}'`)){
+              if(element.id === id){
                 this.Answered =  this.Answered.filter(e => e !== element);
               }
             }
           });
-          this.Answered.push(value);
+          this.Answered.push({'id':id,'answer':option_value,'my_Quiz_serial':my_Quiz_serial});
         }if(this.Answered.length === 0){
-          this.Answered.push(value);
+          this.Answered.push({'id':id,'answer':option_value,'my_Quiz_serial':my_Quiz_serial});
         }
 
-        document.getElementById(id).classList.add('bg-AnswerColor')
+        document.getElementById(id).classList.add('bg-AnswerColor');
 
       },
       Next(){
@@ -303,5 +303,8 @@ import Loading from "@/components/local/Loading";
 .Responsive{
   display: grid;
   grid-template-columns: auto  ;
+}
+.options{
+  min-height: 100px;
 }
 </style>
