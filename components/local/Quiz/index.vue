@@ -229,12 +229,8 @@ import Loading from "@/components/local/Loading";
         this.Compare();
       },
       Finish_Quiz(){
-        this.status_code === ''
-        this.SendData();
-        if(this.status_code === 'success'){
-          this.$router.push({path:'/Result'})
-        }
-
+        localStorage.setItem("Answered", JSON.stringify(this.Answered))
+        this.$router.push({path:'/Result'})
       },
       Pagination(index){
         this.Quiz_serial = index -1;
