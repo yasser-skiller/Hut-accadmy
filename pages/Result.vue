@@ -1,18 +1,18 @@
 <template>
  <div>
     <AppNav/>
-    <Quiz/>
+    <Result/>
  </div>
 </template>
 
 <script>
 import AppNav from '@/components/Global/AppNav';
-import Quiz from '@/components/local/Quiz';
+import Result from '@/components/local/Result';
 
 export default {
   components:{
     AppNav,
-    Quiz,
+    Result,
   },
 
 }

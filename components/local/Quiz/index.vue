@@ -229,8 +229,11 @@ import Loading from "@/components/local/Loading";
         this.Compare();
       },
       Finish_Quiz(){
+        this.status_code === ''
         this.SendData();
-        this.status_code = '';
+        if(this.status_code === 'success'){
+          this.$router.push({path:'/Result'})
+        }
 
       },
       Pagination(index){
