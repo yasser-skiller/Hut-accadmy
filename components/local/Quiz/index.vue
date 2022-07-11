@@ -220,11 +220,14 @@ import Loading from "@/components/local/Loading";
       },
       Pass(){
         // this.Compare();
-        if(this.Quiz_serial < this.Quiz_data.length - 1){
-          this.Quiz_serial++
-        }
         document.getElementById(this.Quiz_data[this.Quiz_serial].id).classList.add('bg-RevsionColor')
+        setTimeout(() => {
+          if(this.Quiz_serial < this.Quiz_data.length - 1){
+            this.Quiz_serial++
+          }
+          document.getElementById(this.Quiz_data[this.Quiz_serial].id).classList.add('bg-CurrentColor')
 
+        }, 500);
       },
       Previous(){
         this.Quiz_serial-- ;
@@ -299,7 +302,6 @@ import Loading from "@/components/local/Loading";
   display: grid;
   grid-template-columns: auto auto ;
   align-items: flex-start;
-  justify-content: center;
   grid-column-gap: 25px;
 }
 .Responsive{

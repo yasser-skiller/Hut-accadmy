@@ -32,7 +32,7 @@
           <span
             v-on:click="Pagination(index)"
             :id="`${Quiz_data[index-1].id}`"
-            class="py-2 px-3 mx-1 Pagination_label border Pagination_lab"
+            class="py-2 px-3 mx-1 Pagination_label border"
             >
             {{index}}
             </span>
@@ -195,6 +195,12 @@ import Loading from "@/components/local/Loading";
       },
       Compare(){
         setTimeout(() => {
+           let arr_Pagination_label = document.querySelectorAll('.Pagination_label');
+            arr_Pagination_label.forEach(element => {
+              element.classList.remove('current_border')
+            });
+          document.getElementById(this.Quiz_data[this.Quiz_serial].id).classList.add('current_border')
+
           let options = document.querySelectorAll('.options');
           options.forEach(element => {
 
@@ -215,9 +221,8 @@ import Loading from "@/components/local/Loading";
               });
             }
 
-
-
           });
+
         }, 300);
       },
       Result_table_fun(){

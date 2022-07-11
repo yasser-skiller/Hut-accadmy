@@ -174,12 +174,13 @@ a{
 .bg-DarkGrayColor{
   background-color: var(--DarkGrayColor);
 }
-.bg-RevsionColor{
-  background-color: var(--RevsionColor);
-  color: #fff;
-}
+
 .bg-CurrentColor{
   background-color: var(--BlueColor);
+  color: #fff;
+}
+.bg-RevsionColor{
+  background-color: var(--RevsionColor);
   color: #fff;
 }
 .bg-AnswerColor{
@@ -202,6 +203,9 @@ a{
 }
 .text-underline{
   text-decoration-line: underline;
+}
+.current_border{
+  border: 2px solid var(--GrayNaveActive) !important;
 }
 
 /* Mode */
