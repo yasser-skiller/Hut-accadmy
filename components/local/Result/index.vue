@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-container class="my-4" >
-      <div v-if="status_code === 'success' && this.Result.length > 0 ">
+      <div v-if="status_code === 'success' && this.Result.length > 0  ">
        <div class="f-14 d-none">
         <div class="d-flex justify-content-between flex-row-reverse BlueColor">
           <p>Question Answered : <span class="DarkBlueSecColor">{{Result[0].question_answered}}</span></p>
@@ -169,10 +169,10 @@ import Loading from "@/components/local/Loading";
         this.Compare();
       },
       Finish_Quiz(){
-        console.log('localStorage.',JSON.parse(localStorage.getItem("Answered")))
-        console.log('localStorage.',JSON.parse(localStorage.getItem("Quiz_data")))
-        this.Answered = JSON.parse(localStorage.getItem("Answered"));
-        this.Quiz_data = JSON.parse(localStorage.getItem("Quiz_data"));
+        console.log('localStorage.',JSON.parse(localStorage.getItem("Answered_95")))
+        console.log('localStorage.',JSON.parse(localStorage.getItem("Quiz_data_95")))
+        this.Answered = JSON.parse(localStorage.getItem("Answered_95"));
+        this.Quiz_data = JSON.parse(localStorage.getItem("Quiz_data_95"));
         this.SendData();
 
 

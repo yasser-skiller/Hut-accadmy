@@ -234,8 +234,8 @@ import Loading from "@/components/local/Loading";
         this.Compare();
       },
       Finish_Quiz(){
-        localStorage.setItem("Answered", JSON.stringify(this.Answered));
-        localStorage.setItem("Quiz_data", JSON.stringify(this.Quiz_data));
+        localStorage.setItem("Answered_95", JSON.stringify(this.Answered));
+        localStorage.setItem("Quiz_data_95", JSON.stringify(this.Quiz_data));
         this.$router.push({path:'/Result'})
       },
       Pagination(index){
