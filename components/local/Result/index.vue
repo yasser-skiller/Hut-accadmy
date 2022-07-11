@@ -17,6 +17,7 @@
        </div>
 
 
+
        <div class="d-flex justify-content-between">
           <p class="DarkBlueSecColor">مجموع درجاتك <span>{{Result[0].user_mark}}</span>من أصل <span>{{Result[0].mark}}</span></p>
           <p class="">السؤال رقم <span class="OrangeColor">{{Quiz_serial+1}}</span> من <span class="GreenColor">{{Quiz_data.length}}</span> سؤال</p>
@@ -100,6 +101,7 @@
 // import config from "@/config";
 import Loading from "@/components/local/Loading";
   export default {
+    // extends:Line,
     components:{
       Loading,
     },
@@ -114,6 +116,7 @@ import Loading from "@/components/local/Loading";
         Quiz_serial:0,
         Result_table:[],
         table_mode: true,
+
       }
     },
     mounted() {
@@ -151,9 +154,6 @@ import Loading from "@/components/local/Loading";
             console.log('finisf',JSON.parse(res))
             this.status_code = JSON.parse(res).status;
             this.Result = [JSON.parse(res).results];
-            // console.log("Result[0].answered[index-1].key",this.Result[0].answered[0].index)
-                        console.log("Result[0].answered[index-1].key",this.Result[0].answered[96])
-
           })
           .catch(error => console.log('error', error));
 
@@ -172,8 +172,6 @@ import Loading from "@/components/local/Loading";
         console.log('localStorage.',JSON.parse(localStorage.getItem("Quiz_data")))
         this.Answered = JSON.parse(localStorage.getItem("Answered"));
         this.Quiz_data = JSON.parse(localStorage.getItem("Quiz_data"));
-        console.log("this.Answered",this.Answered)
-        console.log("this.Answered",this.Quiz_data)
         this.SendData();
 
 
@@ -206,7 +204,9 @@ import Loading from "@/components/local/Loading";
             }
 
             if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].correct === false){
-              document.getElementById(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered.answered).classList.add('bg-OpacityRedColor');
+              if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered !== ''){
+                document.getElementById(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered.answered).classList.add('bg-OpacityRedColor');
+              }
               this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].options.forEach(ele => {
                 if(ele.is_true === 'yes'){
                   document.getElementById(ele.value).classList.add('bg-OpacityGreenColor');
@@ -214,20 +214,23 @@ import Loading from "@/components/local/Loading";
               });
             }
 
+
+
           });
         }, 300);
       },
       Result_table_fun(){
-        if(this.Answered.length > 0){
-          this.Answered.forEach(element => {
+        if(this.Result[0].tags !== undefined){
+           for(const category in this.Result[0].tags){
             this.Result_table.push({
-              'اسم القسم': 40,
-              'إجمالي الأسئلة': 'Dickerson',
-              'عدد الإجابات الصحيحة': 'Macdonald',
-              'النسبة' : element.id
+              'اسم القسم': category,
+              'إجمالي الأسئلة': this.Result[0].tags[category].total_questions,
+              'عدد الإجابات الصحيحة': this.Result[0].tags[category].correct_answers,
+              'النسبة' : this.Result[0].tags[category].score
             })
-          });
+          }
         }
+
       },
     },
 
