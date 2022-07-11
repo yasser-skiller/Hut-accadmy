@@ -60,8 +60,10 @@
           <div class="w-100 d-flex justify-content-center">
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial === Quiz_data.length-1 " v-on:click="Finish_Quiz">إنهاء الاختبار</b-button>
             <b-button type="button" size="lg" class="p rounded border-0 f-14 btn btn-secondary"  v-if="Quiz_serial !== Quiz_data.length-1 " v-on:click="Next">التالي</b-button>
-            <b-button type="button" size="lg" variant="outline-danger" class="p rounded f-14 mx-3"  v-on:click="Pass">مؤجل</b-button>
-            <b-button type="button" size="lg" class="p rounded f-14 btn-secondary" v-if="Quiz_serial > 0 " v-on:click="Previous">السابق</b-button>
+            <b-button type="button" size="lg" class="p rounded f-14 mx-3" variant="outline-danger" v-if="Quiz_serial > 0 " v-on:click="Previous">السابق</b-button>
+          </div>
+          <div class="w-100 d-flex justify-content-center">
+            <p class="GreenColor mt-3 cursor text-underline"  v-on:click="Pass">تأجيل السؤال</p>
           </div>
 
         </b-col>
@@ -217,10 +219,10 @@ import Loading from "@/components/local/Loading";
         this.Compare();
       },
       Pass(){
+        // this.Compare();
         if(this.Quiz_serial < this.Quiz_data.length - 1){
           this.Quiz_serial++
         }
-        // this.Compare();
         document.getElementById(this.Quiz_data[this.Quiz_serial].id).classList.add('bg-RevsionColor')
 
       },
@@ -229,7 +231,8 @@ import Loading from "@/components/local/Loading";
         this.Compare();
       },
       Finish_Quiz(){
-        localStorage.setItem("Answered", JSON.stringify(this.Answered))
+        localStorage.setItem("Answered", JSON.stringify(this.Answered));
+        localStorage.setItem("Quiz_data", JSON.stringify(this.Quiz_data));
         this.$router.push({path:'/Result'})
       },
       Pagination(index){
@@ -255,7 +258,7 @@ import Loading from "@/components/local/Loading";
                 this.Quiz_duration = this.Minute + ':' + this.Remseconds
               }
             }, 1000);
-            if(this.Remseconds === 1){
+            if(this.Minute === 0 && this.Remseconds === 1){
               this.SendData();
               this.status_code = '';
             }

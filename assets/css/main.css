@@ -10,6 +10,9 @@
   --GreenColorTabel : #48AB70;
   --GreenColor: #48AB70;
   --DarkGreenColor :#458f63;
+  --OpacityGreenColor :#E1FFED ;
+  --OpacityRedColor :#FFEBEB ;
+  --RedColor :#FF5151 ;
   --OrangeColor:#FF6B35;
   --DarkOrangeColor:#df5c2d;
   --BlueColor: #37B9CE;
@@ -102,6 +105,7 @@ a{
   background-image: linear-gradient(90deg,#30a4b6,#3b6496);
   transition:.5s ease-in-out;
 }
+
 .rounded{
   border-radius: 10px !important;
 }
@@ -115,6 +119,9 @@ a{
 }
 .OrangeColor{
   color: var(--OrangeColor);
+}
+.AnswerColor{
+  color: var(--AnswerColor);
 }
 .GrayColor{
   color: var(--GrayColor);
@@ -142,8 +149,25 @@ a{
 }
 
 .bg-GreenColor{
-  background-color: #48AB70 !important;
+  background-color: var(--GreenColor) ;
 }
+
+.bg-RedColor{
+  background-color: var(--RedColor) ;
+}
+
+
+.bg-OpacityRedColor{
+  background-color: var(--OpacityRedColor) !important;
+  border-color: var(--RedColor) !important;
+}
+
+.bg-OpacityGreenColor{
+  background-color: var(--OpacityGreenColor) !important ;
+  border-color: var(--GreenColor) !important;
+}
+
+
 .bg-WhiteColor{
   background-color: var(--WhiteColor);
 }
@@ -172,6 +196,12 @@ a{
 }
 .f-14{
   font-size: 14px;
+}
+.cursor{
+  cursor: pointer;
+}
+.text-underline{
+  text-decoration-line: underline;
 }
 
 /* Mode */
