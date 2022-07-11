@@ -94,14 +94,16 @@
       </div>
     </b-container>
 
+
   </div>
 </template>
 
 <script>
 // import config from "@/config";
+
 import Loading from "@/components/local/Loading";
+
   export default {
-    // extends:Line,
     components:{
       Loading,
     },
@@ -116,7 +118,6 @@ import Loading from "@/components/local/Loading";
         Quiz_serial:0,
         Result_table:[],
         table_mode: true,
-
       }
     },
     mounted() {
@@ -265,7 +266,6 @@ import Loading from "@/components/local/Loading";
   display: grid;
   grid-template-columns: auto auto ;
   align-items: flex-start;
-  justify-content: center;
   grid-column-gap: 25px;
 }
 .Responsive{
