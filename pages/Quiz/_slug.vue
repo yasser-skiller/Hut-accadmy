@@ -1,5 +1,7 @@
 <template >
- <b-container class="my-4" >
+<div>
+  <AppNav/>
+  <b-container class="my-4" >
   <div v-if="status_code === 'success' && this.Quiz_data.length > 0 ">
      <div class="d-flex justify-content-end">
         <p class="">السؤال رقم <span class="OrangeColor">{{Quiz_serial+1}}</span> من <span class="GreenColor">{{Quiz_data.length}}</span> سؤال</p>
@@ -92,14 +94,19 @@
 
 
   </b-container>
+</div>
+
 </template>
 
 <script>
-// import config from "@/config";
+import config from "@/config";
 import Loading from "@/components/local/Loading";
+import AppNav from '@/components/Global/AppNav';
+
   export default {
     components:{
       Loading,
+      AppNav
     },
     data() {
       return {
@@ -116,16 +123,16 @@ import Loading from "@/components/local/Loading";
       }
     },
     mounted() {
+      this.SendData();
       this.fetchData();
     },
     methods: {
       fetchData() {
-        this.SendData();
         var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL3dvcmRwcmVzcyIsImlhdCI6MTY1NzE5NTE5MywibmJmIjoxNjU3MTk1MTkzLCJleHAiOjE2NTc3OTk5OTMsImRhdGEiOnsidXNlciI6eyJpZCI6IjEifX19.1aF7JCRBx4YrgtA622JyNsUvKk1DMXhJPsI8pmuKTRI");
+        myHeaders.append("Authorization", `Bearer${config.token}`);
         myHeaders.append("Content-Type", "application/json");
 
-        var raw = JSON.stringify({"id":"95"});
+        var raw = JSON.stringify({"id":this.$route.params.slug});
 
         var requestOptions = {
           method: 'POST',
@@ -134,7 +141,7 @@ import Loading from "@/components/local/Loading";
           redirect: 'follow'
         };
 
-        fetch("http://localhost/wordpress/wp-json/learnpress/v1/quiz/start", requestOptions)
+        fetch(config.apiUrl+"wp-json/learnpress/v1/quiz/start", requestOptions)
         .then(response => response.text())
         .then(res => {
           console.log(JSON.parse(res))
@@ -152,7 +159,7 @@ import Loading from "@/components/local/Loading";
       },
       SendData() {
         var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL3dvcmRwcmVzcyIsImlhdCI6MTY1NzE5NTE5MywibmJmIjoxNjU3MTk1MTkzLCJleHAiOjE2NTc3OTk5OTMsImRhdGEiOnsidXNlciI6eyJpZCI6IjEifX19.1aF7JCRBx4YrgtA622JyNsUvKk1DMXhJPsI8pmuKTRI");
+        myHeaders.append("Authorization", `Bearer${config.token}`);
         myHeaders.append("Content-Type", "application/json");
 
         if(this.Answered.length > 0){
@@ -162,7 +169,7 @@ import Loading from "@/components/local/Loading";
           console.log("Answered_obj",this.Answered_obj)
         }
 
-        var raw = JSON.stringify({"id":"95", "answered" : this.Answered_obj});
+        var raw = JSON.stringify({"id":this.$route.params.slug, "answered" : this.Answered_obj});
 
         var requestOptions = {
           method: 'POST',
@@ -171,7 +178,7 @@ import Loading from "@/components/local/Loading";
           redirect: 'follow'
         };
 
-        fetch("http://localhost/wordpress/wp-json/learnpress/v1/quiz/finish", requestOptions)
+        fetch(config.apiUrl+"wp-json/learnpress/v1/quiz/finish", requestOptions)
           .then(response => response.text())
           .then(res => {
             console.log('finisf',JSON.parse(res))
@@ -234,8 +241,8 @@ import Loading from "@/components/local/Loading";
         this.Compare();
       },
       Finish_Quiz(){
-        localStorage.setItem("Answered_95", JSON.stringify(this.Answered));
-        localStorage.setItem("Quiz_data_95", JSON.stringify(this.Quiz_data));
+        localStorage.setItem(`Answered_${this.$route.params.slug}`, JSON.stringify(this.Answered));
+        localStorage.setItem(`Quiz_data_${this.$route.params.slug}`, JSON.stringify(this.Quiz_data));
         this.$router.push({path:'/Result'})
       },
       Pagination(index){

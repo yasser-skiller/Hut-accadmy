@@ -1,4 +1,4 @@
-<template >
+<template>
     <b-navbar toggleable="lg"  class="nav" >
 
     <b-navbar-brand href="#">
@@ -10,29 +10,82 @@
         </div>
       </div>
     </b-navbar-brand>
+    <div v-if="ModeCase === true" class="d-lg-block d-none">
+        <b-button
+          size="sm"
+          v-on:click="handelMode(!ModeCase)"
+          class="my-2 my-sm-2 mr-3 py-1 px-3 rounded WhiteColor"
+          type="button"
+          variant="outline-primary"
+        >
+          <img :src="require(`~/assets/icon/mode.svg`)" class="ml-2" alt="icon">
+          نهاري
+        </b-button>
+    </div>
 
+    <div v-if="ModeCase === false" class="d-lg-block d-none">
+        <b-button
+          size="sm"
+          v-on:click="handelMode(!ModeCase)"
+          class="my-2 my-sm-2 mr-3 py-1 px-3 rounded"
+          type="button"
+          variant="outline-primary"
+        >
+          <img :src="require(`~/assets/icon/sleep-mode.svg`)" class="ml-2" alt="icon">
+          ليلي
+        </b-button>
+    </div>
+
+
+    <div v-if="ModeCase === true" class="change">
+      <b-navbar-toggle target="nav-collapse">
+        <span class="NavIcon"></span>
+      </b-navbar-toggle>
+    </div>
+     <div v-if="ModeCase === false" >
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    </div>
 
     <b-collapse id="nav-collapse" class="justify-content-around" is-nav>
 
 
-      <b-navbar-nav class="NavBar text-center justify-content-around w-70  align-items-center">
+      <b-navbar-nav class=" NavBar text-center justify-content-around w-70  align-items-center">
         <NuxtLink  to="/" tag="li" exact class="nav-link">الرئيسية</NuxtLink >
         <NuxtLink to="#WE" class="nav-link"> من نحن</NuxtLink>
-        <NuxtLink to="#Qudurat" class="nav-link">قدرات</NuxtLink>
+        <NuxtLink to="/Qudurat" class="nav-link">قدرات</NuxtLink>
         <NuxtLink to="#Tahasuli" class="nav-link">تحصيلي</NuxtLink>
         <NuxtLink to="#Contact" class="nav-link">الدعم الفني</NuxtLink>
         <NuxtLink to="#LastNews" class="nav-link"> اخر الاخبار</NuxtLink>
       </b-navbar-nav>
 
       <b-navbar-nav class="pr-0">
-
-        <div class="d-flex">
-          <img :src="require(`~/assets/img/person.png`)" class="rounded-circle person" alt="icon"/>
-          <div class="mr-1 mt-1">
-            <p class="personName my-0">محمد مصطفي علي</p>
-            <p class="personTitle DarkBlueSecColor my-0">محمد1994</p>
-          </div>
+        <div v-if="ModeCase === true" class="d-lg-none">
+        <b-button
+          size="sm"
+          v-on:click="handelMode(!ModeCase)"
+          class="my-2 my-sm-2 mr-3 py-1 px-3 rounded WhiteColor"
+          type="button"
+          variant="outline-primary"
+        >
+          <img :src="require(`~/assets/icon/mode.svg`)" class="ml-2" alt="icon">
+          نهاري
+        </b-button>
         </div>
+
+        <div v-if="ModeCase === false" class="d-lg-none">
+        <b-button
+          size="sm"
+          v-on:click="handelMode(!ModeCase)"
+          class="my-2 my-sm-2 mr-3 py-1 px-3 rounded"
+          type="button"
+          variant="outline-primary"
+        >
+          <img :src="require(`~/assets/icon/sleep-mode.svg`)" class="ml-2" alt="icon">
+          ليلي
+        </b-button>
+        </div>
+        <b-button size="sm" class="my-2 my-sm-2 mx-2 py-2 px-4 rounded" type="button" variant="primary" >تسجيل دخول</b-button>
+        <b-button size="sm" class="my-2 my-sm-2 mx-2 py-2 px-4 rounded" type="button" variant="success">انشاء حساب</b-button>
       </b-navbar-nav>
 
     </b-collapse>
@@ -40,11 +93,120 @@
     </b-navbar>
 </template>
 
+<script>
+export default {
+data() {
+    return {
+      ModeCase: false,
+    };
+  },
+  methods: {
+    handelMode: function (Case) {
+      this.ModeCase = Case;
+      localStorage.setItem("ModeCase", JSON.stringify(this.ModeCase));
+
+      if(document.querySelector(".darkMode") ||
+        document.querySelector('.formParent') ||
+        document.querySelector('.bg-imgWE'))
+      {
+        document.querySelector(".darkMode").classList.toggle('active');
+        document.querySelector('.formParent').classList.toggle('formParentMode');
+        document.querySelector('.bg-imgWE').classList.toggle('imgMode');
+      }
+
+
+      if(Case === true){
+        if(document.querySelector('.bg-img-gradient') &&
+          document.querySelector('.btn-secondary') &&
+          document.querySelector('#WE')&&
+          document.querySelector('.Alnamudhaj')&&
+          document.querySelector('.formParent') &&
+          document.querySelector('.inputStyleModeTwo') &&
+          document.querySelector('.inputStyleMode') &&
+          document.querySelector('.Change') &&
+          document.querySelector('.inputStyle') &&
+          document.querySelector('.inputStyleMode')
+        )
+        {
+          document.querySelector('.bg-img-gradient').style.backgroundImage = 'linear-gradient(180deg,#2D727D,#1E324A)';
+          document.querySelector('.btn-secondary').style.backgroundImage = 'linear-gradient(90deg,#3D6F77,#3C6292)';
+          document.querySelector('#WE').classList.remove('fill');
+          document.querySelector('.Alnamudhaj').classList.toggle('bg-img');
+          document.querySelector('.Alnamudhaj').classList.toggle('bg-imgMode');
+          document.querySelector('.formParent').style.backgroundColor = 'var(--GrayColor)';
+          document.querySelector('.inputStyleModeTwo').style.backgroundColor = 'var(--DarkGrayColor)';
+          document.querySelector('.inputStyleMode').style.backgroundColor = 'var(--DarkGrayColor)';
+          document.querySelector('.inputStyleModeTwo').style.border = 'none';
+          document.querySelector('.inputStyleMode').style.border = 'none';
+          document.querySelectorAll('.Change').forEach(element => {
+            element.classList.toggle('inputStyle');
+            element.classList.toggle('inputStyleMode');
+          });
+
+        }
+        document.querySelector('body').style.backgroundColor = 'var(--DarkGrayColor)';
+        document.querySelector('body').style.color = 'var(--WhiteColor)';
+        document.querySelector('.logoText').style.color = '#fff';
+        document.documentElement.style.setProperty('--GreenColorTabel', '#63C48A');
+        document.documentElement.style.setProperty('--BlueColor', '#2d6375');
+        document.documentElement.style.setProperty('--DarkWhiteSceColor', '#d4d4d4');
+        document.documentElement.style.setProperty('--GrayNaveActive', '#ffffff');
+        document.documentElement.style.setProperty('--GrayNave', '#94969A');
+        document.documentElement.style.setProperty('--GreenColor', '#306B48');
+        document.documentElement.style.setProperty('--OrangeColor', '#CC5429');
+
+      }else{
+
+        if(document.querySelector('.bg-img-gradient') &&
+          document.querySelector('.btn-secondary') &&
+          document.querySelector('#WE')&&
+          document.querySelector('.Alnamudhaj')&&
+          document.querySelector('.formParent') &&
+          document.querySelector('.inputStyleModeTwo') &&
+          document.querySelector('.inputStyleMode') &&
+          document.querySelector('.Change') &&
+          document.querySelector('.inputStyle') &&
+          document.querySelector('.inputStyleMode')
+        )
+        {
+          document.querySelector('.bg-img-gradient').style.backgroundImage = 'linear-gradient(180deg,#2D727D,#1E324A)';
+          document.querySelector('.btn-secondary').style.backgroundImage = 'linear-gradient(90deg,#2a92a2,#4677AD)';
+          document.querySelector('.Alnamudhaj').classList.toggle('bg-img');
+          document.querySelector('.Alnamudhaj').classList.toggle('bg-imgMode');
+          document.querySelector('.formParent').style.backgroundColor = 'var(--WhiteColor)';
+          document.querySelector('.inputStyleModeTwo').style.backgroundColor = 'var(--WhiteColor)';
+          document.querySelector('.inputStyleMode').style.backgroundColor = 'var(--WhiteColor)';
+          document.querySelector('.inputStyleModeTwo').style.border = '1px solid #ced4da';
+          document.querySelector('.inputStyleMode').style.border = '1px solid #ced4da';
+          document.querySelectorAll('.Change').forEach(element => {
+            element.classList.toggle('inputStyle');
+            element.classList.toggle('inputStyleMode');
+          });
+
+        }
+
+        document.querySelector('body').style.backgroundColor = 'var(--WhiteColor)';
+        document.querySelector('body').style.color = 'var(--BlackColor)';
+        document.querySelector('.logoText').style.color = '#000';
+        document.documentElement.style.setProperty('--GreenColorTabel', '#48AB70');
+        document.documentElement.style.setProperty('--BlueColor', '#37B9CE');
+        document.documentElement.style.setProperty('--GreenColor', '#48AB70');
+        document.documentElement.style.setProperty('--OrangeColor', '#FF6B35');
+        document.documentElement.style.setProperty('--DarkWhiteSceColor', '#000');
+        document.documentElement.style.setProperty('--GrayNaveActive', '#363848');
+        document.documentElement.style.setProperty('--GrayNave', '#868891');
+
+      }
+    },
+  }
+
+};
+
+</script>
 
 <style scoped>
  .nav{
-  min-height: 80px;
-  border-bottom: 1px solid gray;
+  border-bottom: 2px solid var(--mainColor);
  }
  .logo{
   width: 55px;
@@ -81,15 +243,5 @@
     height: 40px;
     background-size: contain;
     display: flex;
-}
-.person{
-  width: 50px;
-  height: 50px;
-}
-.personName{
-  font-size: 14px;
-}
-.personTitle{
-  font-size: 12px;
 }
 </style>

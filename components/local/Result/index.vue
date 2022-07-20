@@ -99,7 +99,7 @@
 </template>
 
 <script>
-// import config from "@/config";
+import config from "@/config";
 
 import Loading from "@/components/local/Loading";
 
@@ -131,7 +131,7 @@ import Loading from "@/components/local/Loading";
     methods: {
       SendData() {
         var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL3dvcmRwcmVzcyIsImlhdCI6MTY1NzE5NTE5MywibmJmIjoxNjU3MTk1MTkzLCJleHAiOjE2NTc3OTk5OTMsImRhdGEiOnsidXNlciI6eyJpZCI6IjEifX19.1aF7JCRBx4YrgtA622JyNsUvKk1DMXhJPsI8pmuKTRI");
+        myHeaders.append("Authorization", `Bearer${config.token}`);
         myHeaders.append("Content-Type", "application/json");
 
         if(this.Answered.length > 0){
@@ -149,7 +149,7 @@ import Loading from "@/components/local/Loading";
           redirect: 'follow'
         };
 
-        fetch("http://localhost/wordpress/wp-json/learnpress/v1/quiz/finish", requestOptions)
+        fetch(config.apiUrl+"wp-json/learnpress/v1/quiz/finish", requestOptions)
           .then(response => response.text())
           .then(res => {
             console.log('finisf',JSON.parse(res))

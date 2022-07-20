@@ -22,10 +22,11 @@
   --GrayColor: #353B44;
   --GraySecColor: #707070;
   --GraythrColor: #B2B2B2;
+  --GrayForColor: #EEEEEE;
   --WhiteColor: #fff;
   --DarkWhiteColor:#F2F7F9;
   --DarkWhiteSceColor:#000;
-  --DarkGrayColor:#F5F5F5;
+  --DarkGrayColor:#272c33;
   --fill:#F6FEFF;
   --GrayNave:#868891;
   --GrayNaveActive:#363848;
@@ -104,6 +105,28 @@ a{
 .btn-secondary:hover {
   background-image: linear-gradient(90deg,#30a4b6,#3b6496);
   transition:.5s ease-in-out;
+}
+.btn-info{
+  background-color: #d6d6d6 !important;
+  color: #979797 !important;
+  border: none !important;
+  outline: none;
+  padding: 6px 50px;
+  box-shadow:none !important;
+}
+.btn-info:hover{
+  border: none !important;
+}
+
+.btn-info_active{
+  background-color: #4774ac !important;
+  color: #fefefe !important;
+}
+.border_00{
+  border-radius: 0 10px 10px 0 !important;
+}
+.border_000{
+  border-radius: 10px 0 0 10px  !important;
 }
 
 .rounded{
@@ -187,7 +210,9 @@ a{
   background-color: var(--AnswerColor);
   color: #fff;
 }
-
+.bg-GrayForColor{
+  background-color: var(--GrayForColor);
+}
 .border_0{
   border: 1px solid var(--GraythrColor);
 }
