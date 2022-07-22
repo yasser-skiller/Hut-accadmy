@@ -266,9 +266,10 @@ import AppNav from '@/components/Global/AppNav';
 
         this.last_answer.push(option_value)
         this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds())
+        console.log("last_answer",this.last_answer)
         if(this.last_answer.length === 4){
           if(this.last_answer[0] === this.last_answer[2]){
-            if(this.last_answer[3] - this.last_answer[1] > 2){
+            if(this.last_answer[3] - this.last_answer[1] > 0.5){
               if(this.last_answer[3] - this.last_answer[1] < 5 ){
                 this.CHECK_ANSWER_arr.push(this.last_answer[2],my_Quiz_serial);
                 this.CHECK_ANSWER();
