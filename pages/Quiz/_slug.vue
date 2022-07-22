@@ -38,7 +38,7 @@
           <div :class="Quiz_data[Quiz_serial].paragraph || Quiz_data[Quiz_serial].thumbnail ? 'Responsive' : 'Responsive4' ">
              <div v-for="option in Quiz_data[Quiz_serial].options" :key="option.uid">
                 <label
-                :class="selected === option.value ? `${option.uid} selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options text-dark` : `${option.uid} text-dark rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options`"
+                :class="selected === option.value && Check_Answered_index.includes(Quiz_serial) === false ? `${option.uid} selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options text-dark` : `${option.uid} text-dark rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options`"
                 :for="option.uid"
                 v-on:click="Save(Quiz_data[Quiz_serial].id, option.value, Quiz_serial)"
                 >
@@ -247,48 +247,51 @@ import AppNav from '@/components/Global/AppNav';
 
       },
       Save(id, option_value, my_Quiz_serial){
-        if(this.Answered.length > 0){
-          this.Answered.forEach(element => {
-            if(element){
-              if(element.id === id){
-                this.Answered =  this.Answered.filter(e => e !== element);
+        console.log(this.Check_Answered_index.includes(my_Quiz_serial))
+        if(this.Check_Answered_index.includes(my_Quiz_serial) === false){
+          if(this.Answered.length > 0){
+            this.Answered.forEach(element => {
+              if(element){
+                if(element.id === id){
+                  this.Answered =  this.Answered.filter(e => e !== element);
+                }
               }
-            }
-          });
-          this.Answered.push({'id':id,'answer':option_value,'my_Quiz_serial':my_Quiz_serial});
-        }if(this.Answered.length === 0){
-          this.Answered.push({'id':id,'answer':option_value,'my_Quiz_serial':my_Quiz_serial});
-        }
+            });
+            this.Answered.push({'id':id,'answer':option_value,'my_Quiz_serial':my_Quiz_serial});
+          }if(this.Answered.length === 0){
+            this.Answered.push({'id':id,'answer':option_value,'my_Quiz_serial':my_Quiz_serial});
+          }
 
-        document.getElementById(id).classList.add('bg-AnswerColor');
+          document.getElementById(id).classList.add('bg-AnswerColor');
 
-        // check answer
+          // check answer
 
-        this.last_answer.push(option_value)
-        this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds())
-        console.log("last_answer",this.last_answer)
-        if(this.last_answer.length === 4){
-          if(this.last_answer[0] === this.last_answer[2]){
-            if(this.last_answer[3] - this.last_answer[1] > 0.5){
-              if(this.last_answer[3] - this.last_answer[1] < 5 ){
-                this.CHECK_ANSWER_arr.push(this.last_answer[2],my_Quiz_serial);
-                this.CHECK_ANSWER();
-                this.Check_Answered_index.push(my_Quiz_serial)
+          this.last_answer.push(option_value)
+          this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds())
+          if(this.last_answer.length === 4){
+            if(this.last_answer[0] === this.last_answer[2]){
+              if(this.last_answer[3] - this.last_answer[1] > 0.5){
+                if(this.last_answer[3] - this.last_answer[1] < 5 ){
+                  this.CHECK_ANSWER_arr.push(this.last_answer[2],my_Quiz_serial);
+                  this.CHECK_ANSWER();
+                  this.Check_Answered_index.push(my_Quiz_serial)
+                }
               }
+            }else{
+              this.last_answer = []
+              this.last_answer.push(option_value)
+              this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds() )
             }
-          }else{
+          }
+          if(this.last_answer.length === 6){
             this.last_answer = []
             this.last_answer.push(option_value)
             this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds() )
           }
-        }
-        if(this.last_answer.length === 6){
-          this.last_answer = []
-          this.last_answer.push(option_value)
-          this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds() )
-        }
 
-        console.log("this.last_answer>>>",this.last_answer)
+          console.log("this.last_answer>>>",this.last_answer)
+
+        }
 
 
       },
