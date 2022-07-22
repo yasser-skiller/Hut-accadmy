@@ -1,5 +1,6 @@
 <template>
   <div>
+      <AppNav/>
     <b-container class="my-4" >
       <div v-if="status_code === 'success' && this.Result.length > 0  ">
        <div class="f-14 d-none">
@@ -27,8 +28,8 @@
         <b-table :class="table_mode === true ? 'd-none': 'd-inline-table '" striped hover :items="Result_table"></b-table>
 
 
-        <div class="d-flex w-100 mt-5 mb-4">
-          <div class="" v-for="index in Quiz_data.length" :key="index">
+        <div class="d-flex flex-wrap w-100 mt-5 mb-4">
+          <div class="my-3 mx-2" v-for="index in Quiz_data.length" :key="index">
           <span
             v-on:click="Pagination(index)"
             :id="`${Quiz_data[index-1].id}`"
@@ -100,12 +101,13 @@
 
 <script>
 import config from "@/config";
-
+import AppNav from '@/components/Global/AppNav';
 import Loading from "@/components/local/Loading";
 
   export default {
     components:{
       Loading,
+      AppNav,
     },
     data() {
       return {
@@ -205,18 +207,23 @@ import Loading from "@/components/local/Loading";
           options.forEach(element => {
 
             if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].correct === true){
-              if(element.id === this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered.answered){
+              console.log("ddd",this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id])
+              if(element.id === this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered){
                 element.classList.add('bg-OpacityGreenColor');
               }
+
             }
 
             if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].correct === false){
               if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered !== ''){
                 document.getElementById(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered.answered).classList.add('bg-OpacityRedColor');
               }
+
               this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].options.forEach(ele => {
                 if(ele.is_true === 'yes'){
                   document.getElementById(ele.value).classList.add('bg-OpacityGreenColor');
+                }else{
+                  element.classList.add('bg-OpacityRedColor');
                 }
               });
             }
@@ -277,7 +284,5 @@ import Loading from "@/components/local/Loading";
   display: grid;
   grid-template-columns: auto  ;
 }
-.options{
-  min-height: 100px;
-}
+
 </style>

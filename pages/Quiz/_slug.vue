@@ -7,8 +7,8 @@
         <p class="">السؤال رقم <span class="OrangeColor">{{Quiz_serial+1}}</span> من <span class="GreenColor">{{Quiz_data.length}}</span> سؤال</p>
       </div>
       <p class="text-center DarkBlueSecColor">{{Quiz_duration}}</p>
-      <div class="d-flex w-100 mt-5 mb-4">
-        <div class="" v-for="index in Quiz_data.length" :key="index">
+      <div class="d-flex flex-wrap w-100 mt-5 mb-4">
+        <div class="my-3 mx-2" v-for="index in Quiz_data.length" :key="index">
         <span
           v-on:click="Pagination(index)"
           :id="`${Quiz_data[index-1].id}`"
@@ -38,7 +38,7 @@
           <div :class="Quiz_data[Quiz_serial].paragraph || Quiz_data[Quiz_serial].thumbnail ? 'Responsive' : 'Responsive4' ">
              <div v-for="option in Quiz_data[Quiz_serial].options" :key="option.uid">
                 <label
-                :class="selected === option.value ? 'selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options' : 'rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options'"
+                :class="selected === option.value ? `${option.uid} selected rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options text-dark` : `${option.uid} text-dark rounded bg-DarkGrayColor px-4 py-3 border_0 mb-3 w-100 options`"
                 :for="option.uid"
                 v-on:click="Save(Quiz_data[Quiz_serial].id, option.value, Quiz_serial)"
                 >
@@ -112,7 +112,10 @@ import AppNav from '@/components/Global/AppNav';
       return {
         Quiz_data: [],
         Answered:[],
-        Answered_obj : {},
+        last_answer:[],
+        CHECK_ANSWER_arr:[],
+        Check_Answered_Result : [],
+        Check_Answered_index : [],
         selected: '',
         status_code: '',
         Quiz_serial:0,
@@ -120,10 +123,10 @@ import AppNav from '@/components/Global/AppNav';
         Minute:0,
         Seconds:0,
         Remseconds:0,
+        fliter_uid: [],
       }
     },
     mounted() {
-      this.SendData();
       this.fetchData();
     },
     methods: {
@@ -157,19 +160,36 @@ import AppNav from '@/components/Global/AppNav';
         })
         .catch (error => console.log(error));
       },
-      SendData() {
+      Check_Answered_View(){
+        let options = document.querySelectorAll('.options');
+        if(this.Check_Answered_Result !== undefined){
+          options.forEach(ele => {
+            ele.classList.add('bg-OpacityRedColor')
+            this.Check_Answered_Result.forEach(option => {
+              if(option.is_true === "yes"){
+                this.fliter_uid.push(option.uid)
+                if(ele.classList.contains(option.uid)){
+                  ele.classList.add('bg-OpacityGreenColor')
+                }
+              }
+
+            });
+          })
+        }
+
+      },
+
+      CHECK_ANSWER() {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer${config.token}`);
         myHeaders.append("Content-Type", "application/json");
 
-        if(this.Answered.length > 0){
-          for (var i=0; i<this.Answered.length; i++){
-            this.Answered_obj[this.Answered[i].id] = {answered: `${this.Answered[i].answer}`} ;
-          }
-          console.log("Answered_obj",this.Answered_obj)
-        }
 
-        var raw = JSON.stringify({"id":this.$route.params.slug, "answered" : this.Answered_obj});
+        var raw = JSON.stringify({
+          "id":this.$route.params.slug,
+          "question_id" : this.Quiz_data[this.CHECK_ANSWER_arr[1]].id,
+          "answered" : this.CHECK_ANSWER_arr[0]
+        });
 
         var requestOptions = {
           method: 'POST',
@@ -178,13 +198,18 @@ import AppNav from '@/components/Global/AppNav';
           redirect: 'follow'
         };
 
-        fetch(config.apiUrl+"wp-json/learnpress/v1/quiz/finish", requestOptions)
+        fetch(config.apiUrl+"wp-json/learnpress/v1/quiz/check_answer", requestOptions)
           .then(response => response.text())
           .then(res => {
-            console.log('finisf',JSON.parse(res))
-            this.status_code = JSON.parse(res).status;
+            this.Check_Answered_Result = JSON.parse(res).options;
+            this.CHECK_ANSWER_arr = [];
+            this.Check_Answered_View();
           })
-          .catch(error => console.log('error', error));
+          .catch(error =>{
+            this.CHECK_ANSWER_arr = [];
+            console.log('error', error)
+          });
+
 
       },
       Compare(){
@@ -203,6 +228,23 @@ import AppNav from '@/components/Global/AppNav';
           element.classList.remove('bg-CurrentColor')
         });
         document.getElementById(this.Quiz_data[this.Quiz_serial].id).classList.add('bg-CurrentColor')
+
+        // check
+        setTimeout(() => {
+          if(this.Check_Answered_index.includes(this.Quiz_serial)){
+            let options = document.querySelectorAll('.options');
+            options.forEach(ele => {
+              ele.classList.add('bg-OpacityRedColor')
+              this.fliter_uid.forEach(uid => {
+                if(ele.classList.contains(uid)){
+                  ele.classList.add('bg-OpacityGreenColor')
+                }
+              });
+            })
+          }
+
+        }, 500);
+
       },
       Save(id, option_value, my_Quiz_serial){
         if(this.Answered.length > 0){
@@ -219,6 +261,34 @@ import AppNav from '@/components/Global/AppNav';
         }
 
         document.getElementById(id).classList.add('bg-AnswerColor');
+
+        // check answer
+
+        this.last_answer.push(option_value)
+        this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds())
+        if(this.last_answer.length === 4){
+          if(this.last_answer[0] === this.last_answer[2]){
+            if(this.last_answer[3] - this.last_answer[1] > 2){
+              if(this.last_answer[3] - this.last_answer[1] < 5 ){
+                this.CHECK_ANSWER_arr.push(this.last_answer[2],my_Quiz_serial);
+                this.CHECK_ANSWER();
+                this.Check_Answered_index.push(my_Quiz_serial)
+              }
+            }
+          }else{
+            this.last_answer = []
+            this.last_answer.push(option_value)
+            this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds() )
+          }
+        }
+        if(this.last_answer.length === 6){
+          this.last_answer = []
+          this.last_answer.push(option_value)
+          this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds() )
+        }
+
+        console.log("this.last_answer>>>",this.last_answer)
+
 
       },
       Next(){
@@ -243,7 +313,7 @@ import AppNav from '@/components/Global/AppNav';
       Finish_Quiz(){
         localStorage.setItem(`Answered_${this.$route.params.slug}`, JSON.stringify(this.Answered));
         localStorage.setItem(`Quiz_data_${this.$route.params.slug}`, JSON.stringify(this.Quiz_data));
-        this.$router.push({path:'/Result'})
+        this.$router.push({path:`/Result/${this.$route.params.slug}`})
       },
       Pagination(index){
         this.Quiz_serial = index -1;
@@ -315,7 +385,5 @@ import AppNav from '@/components/Global/AppNav';
   display: grid;
   grid-template-columns: auto  ;
 }
-.options{
-  min-height: 100px;
-}
+.options{}
 </style>

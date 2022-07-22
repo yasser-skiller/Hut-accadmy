@@ -12,7 +12,7 @@
 
         <b-row align-h="center"  class="justify-content-center align-items-center">
           <b-col v-for=" item in Namadhij[$route.params.slug].acf.quizzes_folder" :key="item.id"  cols="11" sm="10"  md="5" lg="4" class="mx-auto my-3">
-            <div class="bg_item" v-on:click = "$router.push({path:'/Quiz/95'})">
+            <div class="bg_item" v-on:click = "$router.push({path:`/Quiz/${item.id}`})">
               <div class="overly">
                 <div class="data">
                   <h5 class="text-center text-white mt-1 mb-3">{{item.title}}</h5>

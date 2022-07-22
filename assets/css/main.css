@@ -27,6 +27,7 @@
   --DarkWhiteColor:#F2F7F9;
   --DarkWhiteSceColor:#000;
   --DarkGrayColor:#272c33;
+  --DarkGraythColor:#f3f3f3;
   --fill:#F6FEFF;
   --GrayNave:#868891;
   --GrayNaveActive:#363848;
@@ -155,6 +156,7 @@ a{
 .GreenColorTabel{
   color: var(--GreenColorTabel) ;
 }
+
 .BlueColor{
   color: var(--TextBlueColor);
 }
@@ -195,7 +197,7 @@ a{
   background-color: var(--WhiteColor);
 }
 .bg-DarkGrayColor{
-  background-color: var(--DarkGrayColor);
+  background-color: var(--DarkGraythColor);
 }
 
 .bg-CurrentColor{

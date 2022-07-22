@@ -4,7 +4,7 @@
     <b-navbar-brand href="#">
       <div  class="d-flex align-items-center">
         <img :src="require(`~/assets/icon/logo.svg`)" class="logo" alt="icon"/>
-        <div class="logoText">
+        <div class="logoText DarkWhiteColor">
           <span>أكاديمية الحوت</span>
           <span>Alhut Academy</span>
         </div>
@@ -102,8 +102,8 @@ data() {
   },
   methods: {
     handelMode: function (Case) {
+
       this.ModeCase = Case;
-      localStorage.setItem("ModeCase", JSON.stringify(this.ModeCase));
 
       if(document.querySelector(".darkMode") ||
         document.querySelector('.formParent') ||
@@ -116,17 +116,7 @@ data() {
 
 
       if(Case === true){
-        if(document.querySelector('.bg-img-gradient') &&
-          document.querySelector('.btn-secondary') &&
-          document.querySelector('#WE')&&
-          document.querySelector('.Alnamudhaj')&&
-          document.querySelector('.formParent') &&
-          document.querySelector('.inputStyleModeTwo') &&
-          document.querySelector('.inputStyleMode') &&
-          document.querySelector('.Change') &&
-          document.querySelector('.inputStyle') &&
-          document.querySelector('.inputStyleMode')
-        )
+        if(document.querySelector('.bg-img-gradient') && document.querySelector('#WE'))
         {
           document.querySelector('.bg-img-gradient').style.backgroundImage = 'linear-gradient(180deg,#2D727D,#1E324A)';
           document.querySelector('.btn-secondary').style.backgroundImage = 'linear-gradient(90deg,#3D6F77,#3C6292)';
@@ -146,7 +136,6 @@ data() {
         }
         document.querySelector('body').style.backgroundColor = 'var(--DarkGrayColor)';
         document.querySelector('body').style.color = 'var(--WhiteColor)';
-        document.querySelector('.logoText').style.color = '#fff';
         document.documentElement.style.setProperty('--GreenColorTabel', '#63C48A');
         document.documentElement.style.setProperty('--BlueColor', '#2d6375');
         document.documentElement.style.setProperty('--DarkWhiteSceColor', '#d4d4d4');
@@ -157,17 +146,7 @@ data() {
 
       }else{
 
-        if(document.querySelector('.bg-img-gradient') &&
-          document.querySelector('.btn-secondary') &&
-          document.querySelector('#WE')&&
-          document.querySelector('.Alnamudhaj')&&
-          document.querySelector('.formParent') &&
-          document.querySelector('.inputStyleModeTwo') &&
-          document.querySelector('.inputStyleMode') &&
-          document.querySelector('.Change') &&
-          document.querySelector('.inputStyle') &&
-          document.querySelector('.inputStyleMode')
-        )
+        if(document.querySelector('.bg-img-gradient') && document.querySelector('#WE'))
         {
           document.querySelector('.bg-img-gradient').style.backgroundImage = 'linear-gradient(180deg,#2D727D,#1E324A)';
           document.querySelector('.btn-secondary').style.backgroundImage = 'linear-gradient(90deg,#2a92a2,#4677AD)';
@@ -187,7 +166,6 @@ data() {
 
         document.querySelector('body').style.backgroundColor = 'var(--WhiteColor)';
         document.querySelector('body').style.color = 'var(--BlackColor)';
-        document.querySelector('.logoText').style.color = '#000';
         document.documentElement.style.setProperty('--GreenColorTabel', '#48AB70');
         document.documentElement.style.setProperty('--BlueColor', '#37B9CE');
         document.documentElement.style.setProperty('--GreenColor', '#48AB70');
