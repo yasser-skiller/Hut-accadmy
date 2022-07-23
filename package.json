@@ -19,4 +19,5 @@
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.0.2"
   }
+
 }

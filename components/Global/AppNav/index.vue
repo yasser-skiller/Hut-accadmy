@@ -84,8 +84,13 @@
           ليلي
         </b-button>
         </div>
-        <b-button size="sm" class="my-2 my-sm-2 mx-2 py-2 px-4 rounded" type="button" variant="primary" >تسجيل دخول</b-button>
-        <b-button size="sm" class="my-2 my-sm-2 mx-2 py-2 px-4 rounded" type="button" variant="success">انشاء حساب</b-button>
+        <b-button  v-b-modal.modal-1 size="sm" class="my-2 my-sm-2 mx-2 py-2 px-4 rounded" type="button" variant="primary" >تسجيل دخول</b-button>
+        <!-- <b-button size="sm" class="my-2 my-sm-2 mx-2 py-2 px-4 rounded" type="button" variant="success">انشاء حساب</b-button> -->
+        <b-modal id="modal-1" title="إنشاء حساب جديد"  hide-footer>
+          <div class="modal_style">
+           <Telegram/>
+          </div>
+        </b-modal>
       </b-navbar-nav>
 
     </b-collapse>
@@ -94,7 +99,11 @@
 </template>
 
 <script>
+  import Telegram from "@/components/local/Telegram";
 export default {
+components:{
+  Telegram
+},
 data() {
     return {
       ModeCase: false,
@@ -106,11 +115,11 @@ data() {
       this.ModeCase = Case;
 
       if(document.querySelector(".darkMode") ||
-        document.querySelector('.formParent') ||
+        // document.querySelector('.formParent') ||
         document.querySelector('.bg-imgWE'))
       {
         document.querySelector(".darkMode").classList.toggle('active');
-        document.querySelector('.formParent').classList.toggle('formParentMode');
+        // document.querySelector('.formParent').classList.toggle('formParentMode');
         document.querySelector('.bg-imgWE').classList.toggle('imgMode');
       }
 
@@ -123,11 +132,11 @@ data() {
           document.querySelector('#WE').classList.remove('fill');
           document.querySelector('.Alnamudhaj').classList.toggle('bg-img');
           document.querySelector('.Alnamudhaj').classList.toggle('bg-imgMode');
-          document.querySelector('.formParent').style.backgroundColor = 'var(--GrayColor)';
-          document.querySelector('.inputStyleModeTwo').style.backgroundColor = 'var(--DarkGrayColor)';
-          document.querySelector('.inputStyleMode').style.backgroundColor = 'var(--DarkGrayColor)';
-          document.querySelector('.inputStyleModeTwo').style.border = 'none';
-          document.querySelector('.inputStyleMode').style.border = 'none';
+          // document.querySelector('.formParent').style.backgroundColor = 'var(--GrayColor)';
+          // document.querySelector('.inputStyleModeTwo').style.backgroundColor = 'var(--DarkGrayColor)';
+          // document.querySelector('.inputStyleMode').style.backgroundColor = 'var(--DarkGrayColor)';
+          // document.querySelector('.inputStyleModeTwo').style.border = 'none';
+          // document.querySelector('.inputStyleMode').style.border = 'none';
           document.querySelectorAll('.Change').forEach(element => {
             element.classList.toggle('inputStyle');
             element.classList.toggle('inputStyleMode');
@@ -152,11 +161,11 @@ data() {
           document.querySelector('.btn-secondary').style.backgroundImage = 'linear-gradient(90deg,#2a92a2,#4677AD)';
           document.querySelector('.Alnamudhaj').classList.toggle('bg-img');
           document.querySelector('.Alnamudhaj').classList.toggle('bg-imgMode');
-          document.querySelector('.formParent').style.backgroundColor = 'var(--WhiteColor)';
-          document.querySelector('.inputStyleModeTwo').style.backgroundColor = 'var(--WhiteColor)';
-          document.querySelector('.inputStyleMode').style.backgroundColor = 'var(--WhiteColor)';
-          document.querySelector('.inputStyleModeTwo').style.border = '1px solid #ced4da';
-          document.querySelector('.inputStyleMode').style.border = '1px solid #ced4da';
+          // document.querySelector('.formParent').style.backgroundColor = 'var(--WhiteColor)';
+          // document.querySelector('.inputStyleModeTwo').style.backgroundColor = 'var(--WhiteColor)';
+          // document.querySelector('.inputStyleMode').style.backgroundColor = 'var(--WhiteColor)';
+          // document.querySelector('.inputStyleModeTwo').style.border = '1px solid #ced4da';
+          // document.querySelector('.inputStyleMode').style.border = '1px solid #ced4da';
           document.querySelectorAll('.Change').forEach(element => {
             element.classList.toggle('inputStyle');
             element.classList.toggle('inputStyleMode');
@@ -221,5 +230,13 @@ data() {
     height: 40px;
     background-size: contain;
     display: flex;
+}
+.modal_style{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60vh;
 }
 </style>

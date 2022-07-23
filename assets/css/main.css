@@ -55,6 +55,9 @@ a{
   text-decoration-line: none !important;
 }
 /* bootstrap modified */
+.modal-header button{
+  display: none;
+}
 .btn-outline-primary {
   color: var(--BlueColor) !important;
   border-color: var(--BlueColor) !important;
