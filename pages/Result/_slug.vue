@@ -3,20 +3,6 @@
       <AppNav/>
     <b-container class="my-4" >
       <div v-if="status_code === 'success' && this.Result.length > 0  ">
-       <div class="f-14 d-none">
-        <div class="d-flex justify-content-between flex-row-reverse BlueColor">
-          <p>Question Answered : <span class="DarkBlueSecColor">{{Result[0].question_answered}}</span></p>
-          <p>Question Correct :  <span class="GreenColorTabel">{{Result[0].question_correct}}</span></p>
-          <p>Question Wrong :  <span class="OrangeColor">{{Result[0].question_wrong}}</span></p>
-          <p>Question Empty :  <span class="DarkBlueSecColor">{{Result[0].question_empty}}</span></p>
-          <p>Question Count :  <span class="DarkBlueSecColor">{{Result[0].question_count}}</span></p>
-        </div>
-         <div class="d-flex justify-content-around flex-row-reverse DarkBlueSecColor">
-          <p>Total Mark :  <span class="AnswerColor">{{Result[0].mark}}</span></p>
-          <p>Your Mark :  <span class="GreenColorTabel">{{Result[0].user_mark}}</span></p>
-        </div>
-       </div>
-
 
 
        <div class="d-flex justify-content-between">
@@ -208,23 +194,26 @@ import Loading from "@/components/local/Loading";
 
             if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].correct === true){
               console.log("ddd",this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id])
-              if(element.id === this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered){
+              if(element.id === this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered ||
+                element.id === this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered.answered){
                 element.classList.add('bg-OpacityGreenColor');
               }
 
             }
 
             if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].correct === false){
-              if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered !== ''){
-                document.getElementById(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered.answered).classList.add('bg-OpacityRedColor');
-              }
 
               this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].options.forEach(ele => {
                 if(ele.is_true === 'yes'){
                   document.getElementById(ele.value).classList.add('bg-OpacityGreenColor');
-                }else{
-                  element.classList.add('bg-OpacityRedColor');
                 }
+                if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered === ''){
+                  null
+                }else{
+                  document.getElementById(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered.answered).classList.add('bg-OpacityRedColor');
+                }
+
+
               });
             }
 
