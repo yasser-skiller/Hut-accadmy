@@ -175,24 +175,9 @@ import AppNav from '@/components/Global/AppNav';
 
             });
           })
-
-           this.Answered.forEach(element => {
-              if(element.id === this.Quiz_data[this.Quiz_serial].id){
-                this.Answered =  this.Answered.filter(e => e !== element);
-              }
-            });
-
-          this.Check_Answered_Result.forEach(ele => {
-            if(ele.is_true === 'yes'){
-              this.Answered.push({'id':this.Quiz_data[this.Quiz_serial].id,'answer':ele.value,'my_Quiz_serial':this.Quiz_serial});
-            }
-          });
-          console.log("this.Answeredggg",this.Answered)
-
         }
 
       },
-
       CHECK_ANSWER() {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer${config.token}`);
@@ -302,9 +287,6 @@ import AppNav from '@/components/Global/AppNav';
             this.last_answer.push(option_value)
             this.last_answer.push((new Date().getMinutes() * 60) + new Date().getSeconds() )
           }
-
-          console.log("this.last_answer>>>",this.last_answer)
-
         }
 
 
@@ -329,7 +311,6 @@ import AppNav from '@/components/Global/AppNav';
         this.Compare();
       },
       Finish_Quiz(){
-        console.log("this.Answered  Finish_Quiz",this.Answered)
         localStorage.setItem(`Answered_${this.$route.params.slug}`, JSON.stringify(this.Answered));
         localStorage.setItem(`Quiz_data_${this.$route.params.slug}`, JSON.stringify(this.Quiz_data));
         this.$router.push({path:`/Result/${this.$route.params.slug}`})

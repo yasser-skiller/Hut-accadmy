@@ -210,7 +210,7 @@ import Loading from "@/components/local/Loading";
                 if(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered === ''){
                   null
                 }else{
-                  document.getElementById(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered.answered).classList.add('bg-OpacityRedColor');
+                  document.getElementById(this.Result[0].answered[this.Quiz_data[this.Quiz_serial].id].answered).classList.add('bg-OpacityRedColor');
                 }
 
 
